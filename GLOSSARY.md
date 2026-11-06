@@ -27,8 +27,16 @@ The predicted weather for a Location over seven consecutive days, the first of w
 _Avoid_: Outlook, weather data
 
 **Forecast Day**:
-One day of a Forecast: its condition, high and low temperature, chance of precipitation, and maximum wind.
+One day of a Forecast: its Condition, high and low temperature, chance of precipitation, and maximum wind.
 _Avoid_: Daily, tile, card
+
+**Condition**:
+The single overall kind of weather for a Forecast Day: Clear, Partly cloudy, Cloudy, Fog, Drizzle, Rain, Snow, or Thunderstorm.
+_Avoid_: Weather type, icon, code
+
+**Unit System**:
+The user's choice of how temperature and wind are shown: metric (°C and km/h) or imperial (°F and mph). It defaults to imperial only in the US and its territories, is remembered between visits, and the agent answers in it too.
+_Avoid_: Units, measurement, locale
 
 ## Agent
 
