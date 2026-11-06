@@ -11,7 +11,11 @@ npm install
 npm run dev     # http://localhost:3000
 ```
 
-Weather and place data come from [Open-Meteo](https://open-meteo.com/), which needs no API key.
+Weather and place data come from [Open-Meteo](https://open-meteo.com/), which needs no API key. The agent needs a Claude API key:
+
+```bash
+cp .env.example .env   # then set ANTHROPIC_API_KEY
+```
 
 ## Scripts
 
@@ -22,3 +26,4 @@ Weather and place data come from [Open-Meteo](https://open-meteo.com/), which ne
 | `npm test` | Run the tests once (Vitest) |
 | `npm run test:watch` | Run the tests in watch mode |
 | `npm run lint` | Lint with ESLint |
+| `npm run eval` | Check the agent's behaviour against the real Claude API (costs money; not part of `npm test`) |

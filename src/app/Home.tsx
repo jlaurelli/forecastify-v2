@@ -2,6 +2,8 @@
 
 import { useRef, useState } from "react";
 import type { Location } from "@/locations/location";
+import { askAgentViaApi, type AskAgent } from "@/conversation/askAgent";
+import { ConversationPanel } from "@/conversation/ConversationPanel";
 import type { Forecast } from "@/forecast/forecast";
 import { ForecastDays } from "@/forecast/ForecastDays";
 import { getForecastViaApi } from "@/forecast/getForecastViaApi";
@@ -15,11 +17,13 @@ import { searchLocationsViaApi } from "@/locations/searchLocationsViaApi";
 type Props = {
   searchLocations?: (query: string) => Promise<Location[]>;
   getForecast?: (location: Location) => Promise<Forecast>;
+  askAgent?: AskAgent;
 };
 
 export function Home({
   searchLocations = searchLocationsViaApi,
   getForecast = getForecastViaApi,
+  askAgent = askAgentViaApi,
 }: Props) {
   const [selectedLocation, setSelectedLocation] = useState<Location>();
   const [forecast, setForecast] = useState<Forecast | "unavailable">();
@@ -63,6 +67,15 @@ export function Home({
           <UnitSystemToggle value={unitSystem} onChange={changeUnitSystem} />
           <ForecastDays forecast={forecast} unitSystem={unitSystem} />
         </>
+      )}
+      {selectedLocation && (
+        // Keyed by Location: a different Location starts a new Conversation.
+        <ConversationPanel
+          key={selectedLocation.id}
+          forecast={forecast && forecast !== "unavailable" ? forecast : undefined}
+          unitSystem={unitSystem}
+          askAgent={askAgent}
+        />
       )}
     </main>
   );

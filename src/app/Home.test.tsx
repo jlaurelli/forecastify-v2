@@ -1,52 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { act, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import type { Location } from "@/locations/location";
 import type { Forecast } from "@/forecast/forecast";
 import { ForecastUnavailable } from "@/forecast/getForecast";
 import { Home } from "./Home";
-
-const portland: Location = {
-  id: "5746545",
-  name: "Portland",
-  country: "United States",
-  countryCode: "US",
-  region: "Oregon",
-  latitude: 45.52,
-  longitude: -122.68,
-  timezone: "America/Los_Angeles",
-};
-
-const dates = [
-  "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08",
-  "2026-11-09", "2026-11-10", "2026-11-11",
-];
-
-const forecastFor = (location: Location): Forecast => ({
-  location,
-  days: dates.map((date) => ({
-    date,
-    condition: "Rain",
-    highC: 14.5,
-    lowC: 8.8,
-    precipitationChance: 74,
-    maxWindKmh: 31,
-  })),
-});
-
-const portlandMaine: Location = {
-  ...portland,
-  id: "4975802",
-  region: "Maine",
-  latitude: 43.66,
-  longitude: -70.26,
-  timezone: "America/New_York",
-};
-
-async function selectLocation(user: ReturnType<typeof userEvent.setup>, label: string) {
-  await user.type(screen.getByRole("combobox", { name: /location/i }), "Portl");
-  await user.click(await screen.findByRole("option", { name: label }));
-}
+import { forecastFor, portland, portlandMaine, selectLocation } from "./homeFixtures";
 
 const renderHome = () =>
   render(
@@ -159,7 +117,6 @@ describe("Home", () => {
     );
 
     await selectLocation(user, "Portland, Oregon, United States");
-    await user.clear(screen.getByRole("combobox", { name: /location/i }));
     await selectLocation(user, "Portland, Maine, United States");
     await screen.findByRole("list", { name: /forecast/i });
     await act(async () => {
