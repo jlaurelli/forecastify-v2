@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import type { Location } from "./location";
 import { labelSuggestions } from "./labelSuggestions";
 import { MIN_QUERY_LENGTH } from "./searchLocations";
@@ -20,15 +20,20 @@ export function LocationSearch({ search, onSelect }: Props) {
     failed?: boolean;
   }>({ query: "", suggestions: [] });
   const listId = useId();
+  // Bumped by each new search and by picking a Suggestion, so a search still
+  // running when a Suggestion is picked can't reopen the list.
+  const latestSearch = useRef(0);
 
   useEffect(() => {
     let stale = false;
     const timer = setTimeout(async () => {
+      const thisSearch = ++latestSearch.current;
+      const isLatest = () => !stale && thisSearch === latestSearch.current;
       try {
         const suggestions = await search(query);
-        if (!stale) setResult({ query, suggestions });
+        if (isLatest()) setResult({ query, suggestions });
       } catch {
-        if (!stale) setResult({ query, suggestions: [], failed: true });
+        if (isLatest()) setResult({ query, suggestions: [], failed: true });
       }
     }, DEBOUNCE_MS);
     return () => {
@@ -59,7 +64,11 @@ export function LocationSearch({ search, onSelect }: Props) {
             key={location.id}
             role="option"
             aria-selected={false}
-            onClick={() => onSelect(location)}
+            onClick={() => {
+              latestSearch.current++;
+              setResult({ query: "", suggestions: [] });
+              onSelect(location);
+            }}
           >
             {labels[i]}
           </li>

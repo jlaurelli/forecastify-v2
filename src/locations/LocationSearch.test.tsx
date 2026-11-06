@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { Location } from "./location";
 import { LocationSearch } from "./LocationSearch";
@@ -79,5 +79,62 @@ describe("LocationSearch", () => {
 
     expect(await screen.findByRole("alert")).toHaveTextContent(/couldn.t search/i);
     expect(screen.queryByText(/no places match/i)).not.toBeInTheDocument();
+  });
+
+  it("closes the Suggestions once one is picked", async () => {
+    const user = userEvent.setup();
+    render(
+      <LocationSearch search={async () => [portlandOregon, portlandMaine]} onSelect={vi.fn()} />,
+    );
+
+    await user.type(screen.getByRole("combobox", { name: /location/i }), "Portl");
+    await user.click(
+      await screen.findByRole("option", { name: "Portland, Maine, United States" }),
+    );
+
+    expect(screen.queryAllByRole("option")).toHaveLength(0);
+    expect(screen.getByRole("combobox", { name: /location/i })).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
+    expect(screen.queryByText(/no places match/i)).not.toBeInTheDocument();
+  });
+
+  it("offers Suggestions again when the user types after picking one", async () => {
+    const user = userEvent.setup();
+    render(
+      <LocationSearch search={async () => [portlandOregon, portlandMaine]} onSelect={vi.fn()} />,
+    );
+    const input = screen.getByRole("combobox", { name: /location/i });
+
+    await user.type(input, "Portl");
+    await user.click(
+      await screen.findByRole("option", { name: "Portland, Maine, United States" }),
+    );
+    await user.type(input, "a");
+
+    expect(await screen.findAllByRole("option")).toHaveLength(2);
+  });
+
+  it("stays closed when a search that was still running finishes after the pick", async () => {
+    const user = userEvent.setup();
+    let finishSlowSearch!: () => void;
+    const search = vi.fn(async (query: string) => {
+      if (query === "Portla") {
+        await new Promise<void>((resolve) => (finishSlowSearch = resolve));
+      }
+      return [portlandOregon, portlandMaine];
+    });
+    render(<LocationSearch search={search} onSelect={vi.fn()} />);
+    const input = screen.getByRole("combobox", { name: /location/i });
+
+    await user.type(input, "Portl");
+    const maine = await screen.findByRole("option", { name: "Portland, Maine, United States" });
+    await user.type(input, "a");
+    await vi.waitFor(() => expect(search).toHaveBeenCalledWith("Portla"));
+    await user.click(maine);
+    await act(async () => finishSlowSearch());
+
+    expect(screen.queryAllByRole("option")).toHaveLength(0);
   });
 });
