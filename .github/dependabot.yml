@@ -4,9 +4,15 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    # Minor and patch updates share one pull request; each major update gets
+    # its own, so one breaking upgrade can't hold back the safe ones.
     groups:
-      dependencies:
-        patterns: ["*"]
+      minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # Node's types follow the Node version pinned in .nvmrc; move them with it.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
