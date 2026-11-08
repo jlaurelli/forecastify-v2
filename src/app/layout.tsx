@@ -8,7 +8,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en">
+    // Browser extensions add attributes to <html> (e.g. data-google-analytics-opt-out)
+    // before React hydrates. This silences mismatches in this element's own
+    // attributes only; its children are still checked.
+    <html lang="en" suppressHydrationWarning>
       <body>{children}</body>
     </html>
   );
