@@ -89,12 +89,6 @@ export function Home({
             <ForecastDays forecast={forecast} unitSystem={unitSystem} />
           </>
         )}
-        {selectedLocation && !conversationAvailable && (
-          <p className="weather-panel conversation-unavailable">
-            The Conversation isn’t set up: add <code>ANTHROPIC_API_KEY</code> to the server’s
-            environment to ask about the weather.
-          </p>
-        )}
         {selectedLocation && conversationAvailable && (
           // Keyed by Location: a different Location starts a new Conversation.
           <ConversationPanel

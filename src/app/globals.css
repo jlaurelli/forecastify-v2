@@ -444,9 +444,3 @@ p {
 .conversation > .btn-success {
   margin-left: 0;
 }
-
-.conversation-unavailable {
-  max-width: 50rem;
-  margin: 0 auto;
-  font-size: 1rem;
-}
