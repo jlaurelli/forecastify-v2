@@ -17,6 +17,8 @@ Weather and place data come from [Open-Meteo](https://open-meteo.com/), which ne
 cp .env.example .env   # then set ANTHROPIC_API_KEY
 ```
 
+Without a key, Location Search and the Forecast still work; the page says the Conversation isn't set up.
+
 ## Scripts
 
 | Command | What it does |

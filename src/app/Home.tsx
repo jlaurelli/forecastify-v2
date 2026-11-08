@@ -18,12 +18,14 @@ type Props = {
   searchLocations?: (query: string) => Promise<Location[]>;
   getForecast?: (location: Location) => Promise<Forecast>;
   askAgent?: AskAgent;
+  conversationAvailable?: boolean;
 };
 
 export function Home({
   searchLocations = searchLocationsViaApi,
   getForecast = getForecastViaApi,
   askAgent = askAgentViaApi,
+  conversationAvailable = true,
 }: Props) {
   const [selectedLocation, setSelectedLocation] = useState<Location>();
   const [forecast, setForecast] = useState<Forecast | "unavailable">();
@@ -68,7 +70,13 @@ export function Home({
           <ForecastDays forecast={forecast} unitSystem={unitSystem} />
         </>
       )}
-      {selectedLocation && (
+      {selectedLocation && !conversationAvailable && (
+        <p>
+          The Conversation isn’t set up: add <code>ANTHROPIC_API_KEY</code> to the server’s
+          environment to ask about the weather.
+        </p>
+      )}
+      {selectedLocation && conversationAvailable && (
         // Keyed by Location: a different Location starts a new Conversation.
         <ConversationPanel
           key={selectedLocation.id}

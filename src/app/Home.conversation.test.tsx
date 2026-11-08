@@ -152,4 +152,22 @@ describe("Home Conversation", () => {
     expect(screen.getByRole("button", { name: /^ask$/i })).toBeDisabled();
     expect(screen.getByRole("button", { name: /brief me/i })).toBeDisabled();
   });
+
+  it("explains that the Conversation isn't set up when no agent is available", async () => {
+    const user = userEvent.setup();
+    render(
+      <Home
+        searchLocations={async () => [portland]}
+        getForecast={async (location) => forecastFor(location)}
+        conversationAvailable={false}
+      />,
+    );
+
+    await selectLocation(user, "Portland, Oregon, United States");
+
+    expect(await screen.findByRole("list", { name: /forecast/i })).toBeInTheDocument();
+    expect(screen.getByText(/conversation isn.t set up/i)).toHaveTextContent("ANTHROPIC_API_KEY");
+    expect(screen.queryByRole("textbox", { name: /ask about the weather/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /brief me/i })).not.toBeInTheDocument();
+  });
 });
