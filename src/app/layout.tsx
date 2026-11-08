@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Foreclaustify",
+  title: "Forecastify",
   description: "Find a place and see its upcoming weather.",
 };
 

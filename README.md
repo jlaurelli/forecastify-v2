@@ -1,4 +1,4 @@
-# Foreclaustify
+# Forecastify
 
 An agentic weather app: find a place and see its upcoming weather, with Claude as the agent. Successor to the original "forecastify".
 

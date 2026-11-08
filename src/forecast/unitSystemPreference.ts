@@ -1,6 +1,6 @@
 import { defaultUnitSystem, type UnitSystem } from "./unitSystem";
 
-const STORAGE_KEY = "foreclaustify:unit-system";
+const STORAGE_KEY = "forecastify:unit-system";
 
 /** The user's remembered Unit System, or the default for their browser locale. */
 export function loadUnitSystem(): UnitSystem {

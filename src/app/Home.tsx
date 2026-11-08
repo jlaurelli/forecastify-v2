@@ -68,7 +68,7 @@ export function Home({
   return (
     <>
       <header className="header">
-        <h1 className="header-title">Foreclaustify</h1>
+        <h1 className="header-title">Forecastify</h1>
         {selectedLocation && search}
       </header>
       <main className="main-content">
