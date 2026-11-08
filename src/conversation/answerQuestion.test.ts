@@ -3,6 +3,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { describe, expect, it } from "vitest";
 import type { Location } from "@/locations/location";
 import type { Forecast } from "@/forecast/forecast";
+import { forecastDay } from "@/forecast/forecastFixtures";
 import { AnswerUnavailable, answerQuestion } from "./answerQuestion";
 import { fakeClaude, type ScriptedReply } from "./fakeClaude";
 
@@ -19,10 +20,7 @@ const portland: Location = {
 
 const forecastFor = (location: Location, highC = 14.5): Forecast => ({
   location,
-  days: [
-    { date: "2026-11-06", condition: "Rain", highC, lowC: 8.8, precipitationChance: 74, maxWindKmh: 31,
-      sunrise: "07:00", sunset: "16:48", feelsLikeHighC: 13.1, feelsLikeLowC: 6.2, uvIndex: 2.7 },
-  ],
+  days: [forecastDay({ date: "2026-11-06", highC })],
 });
 
 async function ask(question: string, replies: ScriptedReply[], overrides = {}) {

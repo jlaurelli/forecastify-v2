@@ -1,24 +1,13 @@
 import { describe, expect, it } from "vitest";
 import type { Location } from "@/locations/location";
 import type { Forecast, ForecastDay } from "./forecast";
+import { forecastDay } from "./forecastFixtures";
 import { formatForecastDays } from "./formatForecastDays";
 
 const portland = { name: "Portland" } as Location;
 
-const day = (overrides: Partial<ForecastDay>): ForecastDay => ({
-  date: "2026-11-05",
-  condition: "Rain",
-  highC: 14.5,
-  lowC: 8.8,
-  precipitationChance: 74,
-  maxWindKmh: 20.5,
-  sunrise: "06:55",
-  sunset: "16:53",
-  feelsLikeHighC: 13.1,
-  feelsLikeLowC: 6.2,
-  uvIndex: 2.7,
-  ...overrides,
-});
+const day = (overrides: Partial<ForecastDay>) =>
+  forecastDay({ maxWindKmh: 20.5, sunrise: "06:55", sunset: "16:53", ...overrides });
 
 const forecastOf = (...days: ForecastDay[]): Forecast => ({ location: portland, days });
 

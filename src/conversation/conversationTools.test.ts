@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Location } from "@/locations/location";
 import type { Forecast } from "@/forecast/forecast";
+import { forecastDay } from "@/forecast/forecastFixtures";
 import { ForecastUnavailable } from "@/forecast/getForecast";
 import { conversationTools } from "./conversationTools";
 
@@ -20,21 +21,7 @@ const missouri = springfield("4409896", "Missouri");
 
 const forecastFor = (location: Location): Forecast => ({
   location,
-  days: [
-    {
-      date: "2026-11-06",
-      condition: "Rain",
-      highC: 14.5,
-      lowC: 8.8,
-      precipitationChance: 74,
-      maxWindKmh: 31,
-      sunrise: "07:00",
-      sunset: "16:48",
-      feelsLikeHighC: 13.1,
-      feelsLikeLowC: 6.2,
-      uvIndex: 2.7,
-    },
-  ],
+  days: [forecastDay({ date: "2026-11-06" })],
 });
 
 function toolsFor(

@@ -1,40 +1,9 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
 import { AnswerUnavailable, answerQuestion } from "@/conversation/answerQuestion";
+import { forecastSchema as forecast } from "@/forecast/forecast";
 import { getForecast } from "@/forecast/getForecast";
 import { searchLocations } from "@/locations/searchLocations";
-
-const location = z.object({
-  id: z.string(),
-  name: z.string(),
-  country: z.string(),
-  countryCode: z.string(),
-  region: z.string().optional(),
-  latitude: z.number(),
-  longitude: z.number(),
-  timezone: z.string(),
-});
-
-const timeOfDay = z.string().regex(/^\d{2}:\d{2}$/);
-
-const forecast = z.object({
-  location,
-  days: z.array(
-    z.object({
-      date: z.string(),
-      condition: z.enum(["Clear", "Partly cloudy", "Cloudy", "Fog", "Drizzle", "Rain", "Snow", "Thunderstorm"]),
-      highC: z.number(),
-      lowC: z.number(),
-      precipitationChance: z.number().nullable(),
-      maxWindKmh: z.number(),
-      sunrise: timeOfDay.nullable(),
-      sunset: timeOfDay.nullable(),
-      feelsLikeHighC: z.number(),
-      feelsLikeLowC: z.number(),
-      uvIndex: z.number().nullable(),
-    }),
-  ),
-});
 
 const unitSystem = z.enum(["metric", "imperial"]);
 const question = z.string().trim().min(1).max(1000);

@@ -1,7 +1,8 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { describe, expect, it, vi } from "vitest";
 import type { Location } from "@/locations/location";
-import type { Forecast } from "@/forecast/forecast";
+import type { Condition, Forecast } from "@/forecast/forecast";
+import { forecastDay } from "@/forecast/forecastFixtures";
 import type { UnitSystem } from "@/forecast/unitSystem";
 import { answerQuestion } from "@/conversation/answerQuestion";
 
@@ -32,19 +33,19 @@ const week = (location: Location): Forecast => ({
     ["2026-11-09", "Partly cloudy", 13.8, 7.2, 10],
     ["2026-11-10", "Rain", 15.3, 8.6, 63],
     ["2026-11-11", "Drizzle", 16.2, 10.1, 40],
-  ].map(([date, condition, highC, lowC, precipitationChance]) => ({
-    date: date as string,
-    condition: condition as Forecast["days"][number]["condition"],
-    highC: highC as number,
-    lowC: lowC as number,
-    precipitationChance: precipitationChance as number,
-    maxWindKmh: 20,
-    sunrise: "07:00",
-    sunset: "16:48",
-    feelsLikeHighC: (highC as number) - 1,
-    feelsLikeLowC: (lowC as number) - 2,
-    uvIndex: 2,
-  })),
+  ].map(([date, condition, highC, lowC, precipitationChance]) =>
+    forecastDay({
+      date: date as string,
+      condition: condition as Condition,
+      highC: highC as number,
+      lowC: lowC as number,
+      precipitationChance: precipitationChance as number,
+      maxWindKmh: 20,
+      feelsLikeHighC: (highC as number) - 1,
+      feelsLikeLowC: (lowC as number) - 2,
+      uvIndex: 2,
+    }),
+  ),
 });
 
 const WEEKDAYS = /\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday|mon|tue|wed|thu|fri|sat|sun)\b/gi;

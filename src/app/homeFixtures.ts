@@ -2,6 +2,7 @@ import { screen } from "@testing-library/react";
 import type userEvent from "@testing-library/user-event";
 import type { Location } from "@/locations/location";
 import type { Forecast } from "@/forecast/forecast";
+import { forecastDay } from "@/forecast/forecastFixtures";
 
 export const portland: Location = {
   id: "5746545",
@@ -30,19 +31,7 @@ const dates = [
 
 export const forecastFor = (location: Location): Forecast => ({
   location,
-  days: dates.map((date) => ({
-    date,
-    condition: "Rain",
-    highC: 14.5,
-    lowC: 8.8,
-    precipitationChance: 74,
-    maxWindKmh: 31,
-    sunrise: "07:00",
-    sunset: "16:48",
-    feelsLikeHighC: 13.1,
-    feelsLikeLowC: 6.2,
-    uvIndex: 2.7,
-  })),
+  days: dates.map((date) => forecastDay({ date })),
 });
 
 export async function selectLocation(user: ReturnType<typeof userEvent.setup>, label: string) {
