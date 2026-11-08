@@ -7,8 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "check": "npm run typecheck && npm run lint && npm test && npm run build",
     "eval": "node --env-file-if-exists=.env node_modules/vitest/vitest.mjs run --config vitest.eval.config.ts"
   },
   "dependencies": {
