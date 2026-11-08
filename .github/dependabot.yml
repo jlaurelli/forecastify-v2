@@ -13,6 +13,10 @@ updates:
       # Node's types follow the Node version pinned in .nvmrc; move them with it.
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
+      # typescript-eslint (via eslint-config-next) supports TypeScript <6.1;
+      # remove once it supports 7.
+      - dependency-name: typescript
+        versions: [">=7.0.0"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
