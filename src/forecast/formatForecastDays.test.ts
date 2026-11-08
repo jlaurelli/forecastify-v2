@@ -12,6 +12,11 @@ const day = (overrides: Partial<ForecastDay>): ForecastDay => ({
   lowC: 8.8,
   precipitationChance: 74,
   maxWindKmh: 20.5,
+  sunrise: "06:55",
+  sunset: "16:53",
+  feelsLikeHighC: 13.1,
+  feelsLikeLowC: 6.2,
+  uvIndex: 2.7,
   ...overrides,
 });
 
@@ -27,17 +32,30 @@ describe("formatForecastDays", () => {
         low: "9°",
         precipitationChance: "74%",
         maxWind: "21 km/h",
+        sunrise: "6:55 AM",
+        sunset: "4:53 PM",
+        feelsLikeHigh: "13°",
+        feelsLikeLow: "6°",
+        uvIndex: "3",
       },
     ]);
   });
 
   it("shows a Forecast Day in imperial", () => {
     const [shown] = formatForecastDays(
-      forecastOf(day({ highC: 14.5, lowC: 8.8, maxWindKmh: 31 })),
+      forecastOf(
+        day({ highC: 14.5, lowC: 8.8, maxWindKmh: 31, feelsLikeHighC: 13.1, feelsLikeLowC: 6.2 }),
+      ),
       "imperial",
     );
 
-    expect(shown).toMatchObject({ high: "58°", low: "48°", maxWind: "19 mph" });
+    expect(shown).toMatchObject({
+      high: "58°",
+      low: "48°",
+      maxWind: "19 mph",
+      feelsLikeHigh: "56°",
+      feelsLikeLow: "43°",
+    });
   });
 
   it("labels the first day Today and the rest by weekday", () => {
@@ -55,6 +73,24 @@ describe("formatForecastDays", () => {
     const [shown] = formatForecastDays(forecastOf(day({ precipitationChance: null })), "metric");
 
     expect(shown.precipitationChance).toBe("—");
+  });
+
+  it("shows sunrise and sunset on a 12-hour clock", () => {
+    const [shown] = formatForecastDays(
+      forecastOf(day({ sunrise: "00:05", sunset: "12:30" })),
+      "metric",
+    );
+
+    expect(shown).toMatchObject({ sunrise: "12:05 AM", sunset: "12:30 PM" });
+  });
+
+  it("shows a dash when the sun doesn't rise or set, or there is no UV estimate", () => {
+    const [shown] = formatForecastDays(
+      forecastOf(day({ sunrise: null, sunset: null, uvIndex: null })),
+      "metric",
+    );
+
+    expect(shown).toMatchObject({ sunrise: "—", sunset: "—", uvIndex: "—" });
   });
 
   it("never shows a negative zero", () => {

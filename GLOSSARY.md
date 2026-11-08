@@ -27,7 +27,7 @@ The predicted weather for a Location over seven consecutive days, the first of w
 _Avoid_: Outlook, weather data
 
 **Forecast Day**:
-One day of a Forecast: its Condition, high and low temperature, chance of precipitation, and maximum wind.
+One day of a Forecast: its Condition, high and low temperature, chance of precipitation, maximum wind, sunrise and sunset (none on a day the sun neither rises nor sets), how warm its high and low feel, and peak UV index.
 _Avoid_: Daily, tile, card
 
 **Condition**:

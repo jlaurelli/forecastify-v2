@@ -20,6 +20,13 @@ export type ForecastDay = {
   /** 0–100, or null when the provider has no estimate. */
   precipitationChance: number | null;
   maxWindKmh: number;
+  /** Local time at the Location as HH:MM, or null when the sun doesn't rise or set that day. */
+  sunrise: string | null;
+  sunset: string | null;
+  feelsLikeHighC: number;
+  feelsLikeLowC: number;
+  /** Null when the provider has no estimate. */
+  uvIndex: number | null;
 };
 
 export type Forecast = {

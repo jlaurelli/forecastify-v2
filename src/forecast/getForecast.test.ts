@@ -27,6 +27,17 @@ const sevenDays = {
     temperature_2m_min: [8.8, 8.7, 11.1, 9.1, 7.2, 8.6, 10.1],
     precipitation_probability_max: [13, 74, 86, 86, 57, 63, 40],
     wind_speed_10m_max: [11.2, 20.5, 31.0, 18.4, 9.9, 14.0, 25.3],
+    sunrise: [
+      "2026-11-05T06:55", "2026-11-06T06:56", "2026-11-07T06:58", "2026-11-08T07:00",
+      "2026-11-09T07:01", "2026-11-10T07:03", "2026-11-11T07:04",
+    ],
+    sunset: [
+      "2026-11-05T16:53", "2026-11-06T16:52", "2026-11-07T16:50", "2026-11-08T16:48",
+      "2026-11-09T16:46", "2026-11-10T16:45", "2026-11-11T16:44",
+    ],
+    apparent_temperature_max: [13.1, 14.0, 16.9, 13.9, 12.8, 14.2, 15.5],
+    apparent_temperature_min: [6.2, 6.5, 9.8, 8.6, 7.0, 7.1, 8.4],
+    uv_index_max: [2.7, 1.55, 2.1, 2.7, 1.55, 1.9, null],
   },
 };
 
@@ -45,8 +56,34 @@ describe("getForecast", () => {
       lowC: 8.8,
       precipitationChance: 13,
       maxWindKmh: 11.2,
+      sunrise: "06:55",
+      sunset: "16:53",
+      feelsLikeHighC: 13.1,
+      feelsLikeLowC: 6.2,
+      uvIndex: 2.7,
     });
     expect(forecast.days.map((day) => day.date)).toEqual(sevenDays.daily.time);
+  });
+
+  it("has no sunrise or sunset on a day the sun neither rises nor sets", async () => {
+    // Open-Meteo gives midnight for both during polar night and polar day.
+    const forecast = await getForecast(portland, {
+      fetch: respondWith({
+        daily: {
+          ...sevenDays.daily,
+          sunrise: sevenDays.daily.time.map((date) => `${date}T00:00`),
+          sunset: sevenDays.daily.time.map((date) => `${date}T00:00`),
+        },
+      }),
+    });
+
+    expect(forecast.days[0]).toMatchObject({ sunrise: null, sunset: null });
+  });
+
+  it("has no UV index when the provider has no estimate", async () => {
+    const forecast = await getForecast(portland, { fetch: respondWith(sevenDays) });
+
+    expect(forecast.days[6].uvIndex).toBeNull();
   });
 
   // WMO weather interpretation codes, as documented by Open-Meteo.

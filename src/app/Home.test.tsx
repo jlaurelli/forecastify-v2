@@ -43,6 +43,23 @@ describe("Home", () => {
     expect(days[1]).toHaveTextContent("Fri");
   });
 
+  it("shows extra detail for today, and only today", async () => {
+    browserLocale("en-US");
+    const user = userEvent.setup();
+    renderHome();
+
+    await selectLocation(user, "Portland, Oregon, United States");
+
+    const [today, ...rest] = within(
+      await screen.findByRole("list", { name: /forecast/i }),
+    ).getAllByRole("listitem");
+    expect(today).toHaveTextContent("Sunrise7:00 AM");
+    expect(today).toHaveTextContent("Sunset4:48 PM");
+    expect(today).toHaveTextContent("Feels like56° / 43°");
+    expect(today).toHaveTextContent("UV index3");
+    for (const day of rest) expect(day).not.toHaveTextContent(/sunrise|sunset|feels like|uv index/i);
+  });
+
   it("starts in the Unit System for the browser's locale", async () => {
     browserLocale("en-US");
     const user = userEvent.setup();

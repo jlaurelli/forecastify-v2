@@ -37,6 +37,11 @@ export const forecastFor = (location: Location): Forecast => ({
     lowC: 8.8,
     precipitationChance: 74,
     maxWindKmh: 31,
+    sunrise: "07:00",
+    sunset: "16:48",
+    feelsLikeHighC: 13.1,
+    feelsLikeLowC: 6.2,
+    uvIndex: 2.7,
   })),
 });
 

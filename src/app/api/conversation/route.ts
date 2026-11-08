@@ -15,6 +15,8 @@ const location = z.object({
   timezone: z.string(),
 });
 
+const timeOfDay = z.string().regex(/^\d{2}:\d{2}$/);
+
 const forecast = z.object({
   location,
   days: z.array(
@@ -25,6 +27,11 @@ const forecast = z.object({
       lowC: z.number(),
       precipitationChance: z.number().nullable(),
       maxWindKmh: z.number(),
+      sunrise: timeOfDay.nullable(),
+      sunset: timeOfDay.nullable(),
+      feelsLikeHighC: z.number(),
+      feelsLikeLowC: z.number(),
+      uvIndex: z.number().nullable(),
     }),
   ),
 });

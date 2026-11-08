@@ -39,6 +39,11 @@ const week = (location: Location): Forecast => ({
     lowC: lowC as number,
     precipitationChance: precipitationChance as number,
     maxWindKmh: 20,
+    sunrise: "07:00",
+    sunset: "16:48",
+    feelsLikeHighC: (highC as number) - 1,
+    feelsLikeLowC: (lowC as number) - 2,
+    uvIndex: 2,
   })),
 });
 

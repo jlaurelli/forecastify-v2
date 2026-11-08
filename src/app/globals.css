@@ -253,16 +253,23 @@ p {
 
 .forecast-days {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
   margin: 0 0 2rem;
   padding: 0;
   list-style: none;
 }
 
-@media (min-width: 992px) {
+/* The six days after today sit in two rows of three beneath it. */
+@media (min-width: 600px) {
   .forecast-days {
     grid-template-columns: repeat(3, 1fr);
+    gap: 2rem 1.5rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .forecast-days {
     column-gap: 8.33%;
   }
 }
@@ -282,8 +289,9 @@ p {
 }
 
 @media (max-width: 599px) {
-  .forecast-days {
-    gap: 1rem;
+  .forecast-day:not(.forecast-today) {
+    padding: 16px 8px;
+    font-size: 0.875rem;
   }
 
   .subheader {
@@ -299,8 +307,8 @@ p {
 
 @media (max-width: 599px) {
   .condition-icon {
-    width: 72px;
-    height: 72px;
+    width: 64px;
+    height: 64px;
   }
 }
 
@@ -316,6 +324,88 @@ p {
 
 .forecast-day .temperatures {
   font-size: 20px;
+}
+
+@media (max-width: 599px) {
+  .forecast-day:not(.forecast-today) .day-name {
+    font-size: 1.5rem;
+  }
+
+  .forecast-day:not(.forecast-today) .condition {
+    font-size: 1.125rem;
+  }
+
+  .forecast-day:not(.forecast-today) .temperatures {
+    font-size: 1rem;
+  }
+}
+
+/* Today */
+
+.forecast-today {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: min(44rem, 100%);
+  padding: 32px 24px;
+}
+
+.forecast-today .condition-icon {
+  width: 144px;
+  height: 144px;
+}
+
+.forecast-today .day-name {
+  font-size: 2.75rem;
+}
+
+.forecast-today .condition {
+  font-size: 1.75rem;
+}
+
+.forecast-today .temperatures {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.today-details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  width: 100%;
+  margin: 1rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+@media (min-width: 600px) {
+  .today-details {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.today-details dt {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #495057;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.today-details dd {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+@media (max-width: 599px) {
+  .forecast-today .condition-icon {
+    width: 112px;
+    height: 112px;
+  }
+
+  .forecast-today .day-name {
+    font-size: 2.25rem;
+  }
 }
 
 /* Conversation */

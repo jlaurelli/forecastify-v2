@@ -11,6 +11,11 @@ type OpenMeteoDaily = {
   temperature_2m_min: number[];
   precipitation_probability_max: (number | null)[];
   wind_speed_10m_max: number[];
+  sunrise: string[];
+  sunset: string[];
+  apparent_temperature_max: number[];
+  apparent_temperature_min: number[];
+  uv_index_max: (number | null)[];
 };
 
 type Options = { fetch?: typeof fetch };
@@ -33,7 +38,18 @@ export async function getForecast(
   url.searchParams.set("forecast_days", String(FORECAST_DAYS));
   url.searchParams.set(
     "daily",
-    "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max",
+    [
+      "weather_code",
+      "temperature_2m_max",
+      "temperature_2m_min",
+      "precipitation_probability_max",
+      "wind_speed_10m_max",
+      "sunrise",
+      "sunset",
+      "apparent_temperature_max",
+      "apparent_temperature_min",
+      "uv_index_max",
+    ].join(","),
   );
 
   let response: Response;
@@ -48,16 +64,28 @@ export async function getForecast(
 
   return {
     location,
-    days: daily.time.map((date, i) => ({
-      date,
-      condition: toCondition(daily.weather_code[i]),
-      highC: daily.temperature_2m_max[i],
-      lowC: daily.temperature_2m_min[i],
-      precipitationChance: daily.precipitation_probability_max[i],
-      maxWindKmh: daily.wind_speed_10m_max[i],
-    })),
+    days: daily.time.map((date, i) => {
+      // Open-Meteo gives midnight for both when the sun neither rises nor sets.
+      const sunRisesAndSets = daily.sunrise[i] !== daily.sunset[i];
+      return {
+        date,
+        condition: toCondition(daily.weather_code[i]),
+        highC: daily.temperature_2m_max[i],
+        lowC: daily.temperature_2m_min[i],
+        precipitationChance: daily.precipitation_probability_max[i],
+        maxWindKmh: daily.wind_speed_10m_max[i],
+        sunrise: sunRisesAndSets ? timeOfDay(daily.sunrise[i]) : null,
+        sunset: sunRisesAndSets ? timeOfDay(daily.sunset[i]) : null,
+        feelsLikeHighC: daily.apparent_temperature_max[i],
+        feelsLikeLowC: daily.apparent_temperature_min[i],
+        uvIndex: daily.uv_index_max[i],
+      };
+    }),
   };
 }
+
+/** "2026-11-05T06:55" → "06:55", already local to the Location. */
+const timeOfDay = (dateTime: string) => dateTime.slice(dateTime.indexOf("T") + 1);
 
 const CONDITION_CODES: [Condition, number[]][] = [
   ["Clear", [0, 1]],
