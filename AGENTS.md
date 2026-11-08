@@ -8,4 +8,6 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
+Domain terms live in `GLOSSARY.md`; use them in names, tests and UI copy.
+
 Browser console warnings and errors appear in the `next dev` output prefixed `[browser]`; read it after any UI change.
