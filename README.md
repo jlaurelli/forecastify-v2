@@ -11,7 +11,7 @@ npm install
 npm run dev     # http://localhost:3000
 ```
 
-Weather and place data come from [Open-Meteo](https://open-meteo.com/), which needs no API key. The agent needs a Claude API key:
+Weather and place data come from [Open-Meteo](https://open-meteo.com/), and Radar from [RainViewer](https://www.rainviewer.com/) on a [Stadia Maps](https://stadiamaps.com/) base map; none needs an API key locally. RainViewer's free API is for personal and educational use only, and before deploying, the site's domain must be registered on a (free, non-commercial) Stadia account. The agent needs a Claude API key:
 
 ```bash
 cp .env.example .env   # then set ANTHROPIC_API_KEY

@@ -38,6 +38,10 @@ _Avoid_: Weather type, icon, code
 The user's choice of how temperature and wind are shown: metric (°C and km/h) or imperial (°F and mph). It defaults to imperial only in the US and its territories, is remembered between visits, and the agent answers in it too.
 _Avoid_: Units, measurement, locale
 
+**Radar**:
+The precipitation observed around the Selected Location over the past two hours, shown as an animated map.
+_Avoid_: Rain map, precipitation map, satellite
+
 ## Agent
 
 **Forecast Brief**:

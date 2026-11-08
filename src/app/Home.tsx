@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type ComponentType } from "react";
 import type { Location } from "@/locations/location";
 import { askAgentViaApi, type AskAgent } from "@/conversation/askAgent";
 import { ConversationPanel } from "@/conversation/ConversationPanel";
@@ -11,6 +11,10 @@ import { UnitSystemToggle } from "@/forecast/UnitSystemToggle";
 import type { UnitSystem } from "@/forecast/unitSystem";
 import { loadUnitSystem, saveUnitSystem } from "@/forecast/unitSystemPreference";
 import { LocationSearch } from "@/locations/LocationSearch";
+import { getRadarFrames as getRadarFramesFromRainViewer } from "@/radar/getRadarFrames";
+import { LeafletRadarMap } from "@/radar/LeafletRadarMap";
+import type { RadarFrame, RadarMapProps } from "@/radar/radar";
+import { RadarPanel } from "@/radar/RadarPanel";
 import { labelSuggestions } from "@/locations/labelSuggestions";
 import { searchLocationsViaApi } from "@/locations/searchLocationsViaApi";
 
@@ -19,6 +23,8 @@ type Props = {
   getForecast?: (location: Location) => Promise<Forecast>;
   askAgent?: AskAgent;
   conversationAvailable?: boolean;
+  getRadarFrames?: () => Promise<RadarFrame[]>;
+  RadarMap?: ComponentType<RadarMapProps>;
 };
 
 export function Home({
@@ -26,6 +32,8 @@ export function Home({
   getForecast = getForecastViaApi,
   askAgent = askAgentViaApi,
   conversationAvailable = true,
+  getRadarFrames = getRadarFramesFromRainViewer,
+  RadarMap = LeafletRadarMap,
 }: Props) {
   const [selectedLocation, setSelectedLocation] = useState<Location>();
   const [forecast, setForecast] = useState<Forecast | "unavailable">();
@@ -86,7 +94,15 @@ export function Home({
         {forecast && forecast !== "unavailable" && (
           <>
             <UnitSystemToggle value={unitSystem} onChange={changeUnitSystem} />
-            <ForecastDays forecast={forecast} unitSystem={unitSystem} />
+            <div className="forecast-layout">
+              <ForecastDays forecast={forecast} unitSystem={unitSystem} />
+              <RadarPanel
+                key={forecast.location.id}
+                location={forecast.location}
+                getRadarFrames={getRadarFrames}
+                RadarMap={RadarMap}
+              />
+            </div>
           </>
         )}
         {selectedLocation && conversationAvailable && (
