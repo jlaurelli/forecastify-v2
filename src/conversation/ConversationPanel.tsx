@@ -51,27 +51,28 @@ export function ConversationPanel({ forecast, unitSystem, askAgent }: Props) {
   const canAsk = Boolean(forecast) && !pending;
 
   return (
-    <section>
-      <div role="log" aria-label="Conversation">
+    <section className="weather-panel conversation">
+      <div role="log" aria-label="Conversation" className="conversation-log">
         {shown.map((turn, i) => (
           <div key={i}>
-            <p>{turn.question}</p>
+            <p className="question">{turn.question}</p>
             <p>{turn.answer}</p>
           </div>
         ))}
       </div>
-      {failed && <p role="alert">The agent couldn’t answer that just now. Please try again.</p>}
-      <form onSubmit={submit}>
+      {failed && <p role="alert" className="alert">The agent couldn’t answer that just now. Please try again.</p>}
+      <form onSubmit={submit} className="ask-form">
         <input
+          className="form-control"
           aria-label="Ask about the weather"
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
         />
-        <button type="submit" disabled={!canAsk}>
+        <button type="submit" className="btn-success" disabled={!canAsk}>
           Ask
         </button>
       </form>
-      <button type="button" disabled={!canAsk} onClick={() => ask(BRIEF_REQUEST)}>
+      <button type="button" className="btn-success" disabled={!canAsk} onClick={() => ask(BRIEF_REQUEST)}>
         Brief me
       </button>
     </section>

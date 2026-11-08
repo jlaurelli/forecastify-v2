@@ -49,16 +49,18 @@ export function LocationSearch({ search, onSelect }: Props) {
     result.query.trim().length >= MIN_QUERY_LENGTH && suggestions.length === 0;
 
   return (
-    <div>
+    <div className="location-search">
       <input
+        className="form-control"
         role="combobox"
         aria-label="Search for a location"
+        placeholder="Lancaster, PA"
         aria-controls={listId}
         aria-expanded={suggestions.length > 0}
         value={query}
         onChange={(event) => setQuery(event.target.value)}
       />
-      <ul id={listId} role="listbox">
+      <ul id={listId} role="listbox" className="suggestions">
         {suggestions.map((location, i) => (
           <li
             key={location.id}
@@ -75,9 +77,9 @@ export function LocationSearch({ search, onSelect }: Props) {
         ))}
       </ul>
       {result.failed && (
-        <p role="alert">Couldn’t search for places right now. Please try again.</p>
+        <p role="alert" className="alert">Couldn’t search for places right now. Please try again.</p>
       )}
-      {noMatch && <p>No places match “{result.query.trim()}”.</p>}
+      {noMatch && <p className="notice">No places match “{result.query.trim()}”.</p>}
     </div>
   );
 }

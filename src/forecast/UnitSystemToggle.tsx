@@ -12,7 +12,7 @@ const OPTIONS: { value: UnitSystem; label: string }[] = [
 
 export function UnitSystemToggle({ value, onChange }: Props) {
   return (
-    <fieldset>
+    <fieldset className="unit-system">
       <legend>Units</legend>
       {OPTIONS.map((option) => (
         <label key={option.value}>

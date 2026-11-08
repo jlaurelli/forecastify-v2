@@ -55,36 +55,56 @@ export function Home({
     if (latestSelection.current === location) setForecast(result);
   }
 
+  const search = <LocationSearch search={searchLocations} onSelect={select} />;
+
   return (
-    <main>
-      <h1>Foreclaustify</h1>
-      <LocationSearch search={searchLocations} onSelect={select} />
-      {selectedLocation && <h2>{labelSuggestions([selectedLocation])[0]}</h2>}
-      {selectedLocation && !forecast && <p role="status">Loading forecast…</p>}
-      {forecast === "unavailable" && (
-        <p role="alert">The forecast is unavailable right now. Please try again.</p>
-      )}
-      {forecast && forecast !== "unavailable" && (
-        <>
-          <UnitSystemToggle value={unitSystem} onChange={changeUnitSystem} />
-          <ForecastDays forecast={forecast} unitSystem={unitSystem} />
-        </>
-      )}
-      {selectedLocation && !conversationAvailable && (
-        <p>
-          The Conversation isn’t set up: add <code>ANTHROPIC_API_KEY</code> to the server’s
-          environment to ask about the weather.
-        </p>
-      )}
-      {selectedLocation && conversationAvailable && (
-        // Keyed by Location: a different Location starts a new Conversation.
-        <ConversationPanel
-          key={selectedLocation.id}
-          forecast={forecast && forecast !== "unavailable" ? forecast : undefined}
-          unitSystem={unitSystem}
-          askAgent={askAgent}
-        />
-      )}
-    </main>
+    <>
+      <header className="header">
+        <h1 className="header-title">Foreclaustify</h1>
+        {selectedLocation && search}
+      </header>
+      <main className="main-content">
+        {!selectedLocation && (
+          <div className="prompt">
+            <p className="prompt-title">Enter a city</p>
+            {search}
+          </div>
+        )}
+        {selectedLocation && (
+          <h2 className="subheader">{labelSuggestions([selectedLocation])[0]}</h2>
+        )}
+        {selectedLocation && !forecast && (
+          <p role="status" className="notice">
+            Loading forecast…
+          </p>
+        )}
+        {forecast === "unavailable" && (
+          <p role="alert" className="alert">
+            The forecast is unavailable right now. Please try again.
+          </p>
+        )}
+        {forecast && forecast !== "unavailable" && (
+          <>
+            <UnitSystemToggle value={unitSystem} onChange={changeUnitSystem} />
+            <ForecastDays forecast={forecast} unitSystem={unitSystem} />
+          </>
+        )}
+        {selectedLocation && !conversationAvailable && (
+          <p className="weather-panel conversation-unavailable">
+            The Conversation isn’t set up: add <code>ANTHROPIC_API_KEY</code> to the server’s
+            environment to ask about the weather.
+          </p>
+        )}
+        {selectedLocation && conversationAvailable && (
+          // Keyed by Location: a different Location starts a new Conversation.
+          <ConversationPanel
+            key={selectedLocation.id}
+            forecast={forecast && forecast !== "unavailable" ? forecast : undefined}
+            unitSystem={unitSystem}
+            askAgent={askAgent}
+          />
+        )}
+      </main>
+    </>
   );
 }
