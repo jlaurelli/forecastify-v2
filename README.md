@@ -28,4 +28,7 @@ Without a key, Location Search and the Forecast still work; the page leaves out 
 | `npm test` | Run the tests once (Vitest) |
 | `npm run test:watch` | Run the tests in watch mode |
 | `npm run lint` | Lint with ESLint |
+| `npm run typecheck` | Generate Next's route types and typecheck |
+| `npm run check` | Typecheck, lint, test and build, as CI does |
+| `npm run screenshot -- [place] [width]` | Screenshot the running dev server in headless Chrome, into `screenshots/` |
 | `npm run eval` | Check the agent's behaviour against the real Claude API (costs money; not part of `npm test`) |
